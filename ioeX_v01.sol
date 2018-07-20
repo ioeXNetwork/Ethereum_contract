@@ -178,11 +178,13 @@ contract ioeX_TokenERC20 is owned{
         uint256 in_lock_type;
         uint256 result;
         uint256 result_free_percent;
-        result=0;
         uint256 i;
+        result=0;       
+        
         in_lock_type=lock_account_info[account].lock_type;
     
         if (in_lock_type>0){
+            result_free_percent=0;
             if (in_lock_type<=6){
               in_lock_type=in_lock_type-1;
               for (i=0;i<4;i++){
@@ -195,13 +197,12 @@ contract ioeX_TokenERC20 is owned{
               for (i=0;i<10;i++){
                 if (lock_type_7.time[i]> now){
                   result_free_percent=result_free_percent+lock_type_7.free_percent[i];
-                }
-              
-              }
-            
-            }         
+                }              
+              }            
+            }  
+            result=lock_account_info[account].init_balance*result_free_percent/100;       
         }        
-        result=lock_account_info[account].init_balance*result_free_percent/100;
+        
       
         return result;   
     }
