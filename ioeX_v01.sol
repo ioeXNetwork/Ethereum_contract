@@ -44,6 +44,11 @@ contract ioeX_TokenERC20 is owned{
       uint256[4] free_percent;
     }
     
+    struct struct_lock_type_10{
+      uint256[10] time;
+      uint256[10] free_percent;
+    }
+    
     //Save lock type and amount of init tokens
     struct struct_lock_account_info{
       uint256 lock_type;
@@ -51,6 +56,8 @@ contract ioeX_TokenERC20 is owned{
     }
    
     struct_lock_type[6] lock_type;
+    struct_lock_type_10 lock_type_7;
+    
     mapping (address => struct_lock_account_info) public lock_account_info;
     
    
@@ -83,18 +90,18 @@ contract ioeX_TokenERC20 is owned{
     lock_type[0].free_percent[1]=35;    //35%
     lock_type[0].time[2]=1557936000;    //2019/05/16
     lock_type[0].free_percent[2]=30;    //30%
-    lock_type[0].time[3]=0;            //nodata
-    lock_type[0].free_percent[3]=0;    //nodata
+    lock_type[0].time[3]=0;             //nodata
+    lock_type[0].free_percent[3]=0;     //nodata
     
     
     //Lock type 2
-    lock_type[1].time[0]=1539619200;    //2018/10/16
+    lock_type[1].time[0]=1542297600;    //2018/11/16
     lock_type[1].free_percent[0]=25;    //25%
-    lock_type[1].time[1]=1544889600;    //2018/12/16
+    lock_type[1].time[1]=1550246400;    //2019/02/16
     lock_type[1].free_percent[1]=25;    //25%
-    lock_type[1].time[2]=1550246400;    //2019/02/16
+    lock_type[1].time[2]=1557936000;    //2019/05/16
     lock_type[1].free_percent[2]=25;    //25%
-    lock_type[1].time[3]=1555344000;    //2019/04/16
+    lock_type[1].time[3]=1565884800;    //2019/08/16
     lock_type[1].free_percent[3]=25;    //25%
         
     //Lock type 3    
@@ -136,7 +143,29 @@ contract ioeX_TokenERC20 is owned{
     lock_type[5].free_percent[2]=25;    //25%
     lock_type[5].time[3]=1597507200;    //2020/08/16
     lock_type[5].free_percent[3]=25;    //25% 
-        
+    
+    //Lock type 7
+    lock_type_7.time[0]=1542297600;    //2018/11/16 
+    lock_type_7.free_percent[0]=10;    //10%
+    lock_type_7.time[1]=1544889600;    //2018/12/16 
+    lock_type_7.free_percent[1]=10;    //10%
+    lock_type_7.time[2]=1547568000;    //2019/01/16 
+    lock_type_7.free_percent[2]=10;    //10%
+    lock_type_7.time[3]=1550246400;    //2019/02/16 
+    lock_type_7.free_percent[3]=10;    //10%
+    lock_type_7.time[4]=1552665600;    //2019/03/16 
+    lock_type_7.free_percent[4]=10;    //10%
+    lock_type_7.time[5]=1555344000;    //2019/04/16 
+    lock_type_7.free_percent[5]=10;    //10%
+    lock_type_7.time[6]=1557936000;    //2019/05/16 
+    lock_type_7.free_percent[6]=10;    //10%
+    lock_type_7.time[7]=1560614400;    //2019/06/16 
+    lock_type_7.free_percent[7]=10;    //10%
+    lock_type_7.time[8]=1563206400;    //2019/07/16 
+    lock_type_7.free_percent[8]=10;    //10%
+    lock_type_7.time[9]=1565884800;    //2019/08/16 
+    lock_type_7.free_percent[9]=10;    //10%
+     
     //init all lock data   
         
     }    
@@ -154,12 +183,23 @@ contract ioeX_TokenERC20 is owned{
         in_lock_type=lock_account_info[account].lock_type;
     
         if (in_lock_type>0){
-            in_lock_type=in_lock_type-1;
-            for (i=0;i<4;i++){
-              if (lock_type[in_lock_type].time[i]> now){
-                  result_free_percent=result_free_percent+lock_type[in_lock_type].free_percent[i];
+            if (in_lock_type<=6){
+              in_lock_type=in_lock_type-1;
+              for (i=0;i<4;i++){
+                if (lock_type[in_lock_type].time[i]> now){
+                    result_free_percent=result_free_percent+lock_type[in_lock_type].free_percent[i];
+                }
+              }  
+            }else
+            if (in_lock_type==7){
+              for (i=0;i<10;i++){
+                if (lock_type_7.time[i]> now){
+                  result_free_percent=result_free_percent+lock_type_7.free_percent[i];
+                }
+              
               }
-            }          
+            
+            }         
         }        
         result=lock_account_info[account].init_balance*result_free_percent/100;
       
@@ -175,7 +215,7 @@ contract ioeX_TokenERC20 is owned{
     function _transfer_forlock(address _from, address _to, uint _value,uint select_type)  internal{
         //check     
          require(select_type >=0);
-         require(select_type <6);
+         require(select_type <7);
          require( lock_account_info[_to].lock_type==0);
          require( lock_account_info[_to].init_balance==0);
        
@@ -332,6 +372,19 @@ contract ioeX_TokenERC20 is owned{
      */
     function transfer_lock_balance_6(address _to, uint256 _value) onlyOwner public {       
         _transfer_forlock(msg.sender, _to, _value ,5);
+    }
+    
+    /**
+     * Transfer tokens 
+     * Lock time and token by lock_type 7                
+     *
+     * Send `_value` tokens to `_to` from your account
+     *
+     * @param _to The address of the recipient
+     * @param _value the amount to send
+     */
+    function transfer_lock_balance_7(address _to, uint256 _value) onlyOwner public {       
+        _transfer_forlock(msg.sender, _to, _value ,6);
     }
     
     /**
