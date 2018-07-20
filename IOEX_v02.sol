@@ -229,9 +229,9 @@ contract MyAdvancedToken is owned, TokenERC20 {
 
 contract IOEX is MyAdvancedToken {
     uint constant lockIndexMin = 1;
-    uint constant lockIndexMax = 4;
+    uint constant lockIndexMax = 10;
     uint constant lockTypeMin = 1;
-    uint constant lockTypeMax = 6;
+    uint constant lockTypeMax = 7;
 
     struct lockToken{
         uint lockdate;
@@ -301,15 +301,9 @@ contract IOEX is MyAdvancedToken {
     }
 
     function lockTokenType(address account, uint locktype, uint amount) onlyOwner public returns (bool success){
-        uint firstTime = 0;
-        uint secondTime = 0;
-        uint thirdTime = 0;
-        uint fourthTime = 0;
 
-        uint firstLockToken = 0;
-        uint secondLockToken = 0;
-        uint thirdLockToken = 0;
-        uint fourthLockToken = 0;
+        uint[] memory lockTime = new uint[](10);
+        uint[] memory lockNum = new uint[](10);
 
         require(locktype >= lockTypeMin);
         require(locktype <= lockTypeMax);
@@ -319,88 +313,122 @@ contract IOEX is MyAdvancedToken {
         lockInfos[account].amount = amount;
 
         if(locktype == 1) {
-            firstTime = 1542297600;     //2018-11-16
-            secondTime = 1550246400;    //2019-02-16
-            thirdTime = 1557936000;     //2019-05-16
+            lockTime[0] = 1542297600;     //2018-11-16
+            lockTime[1] = 1550246400;     //2019-02-16
+            lockTime[2] = 1557936000;     //2019-05-16
 
-            firstLockToken = amount * 35 / 100;
-            secondLockToken = amount * 35 / 100;
-            thirdLockToken = amount - firstLockToken - secondLockToken;
+            lockNum[0] = amount * 35 / 100;
+            lockNum[1] = amount * 35 / 100;
+            lockNum[2] = amount - lockNum[0] - lockNum[1];
 
-            lockTokenToDate(account, 1, firstLockToken, firstTime);
-            lockTokenToDate(account, 2, secondLockToken, secondTime);
-            lockTokenToDate(account, 3, thirdLockToken, thirdTime);
+            lockTokenToDate(account, 1, lockNum[0], lockTime[0]);
+            lockTokenToDate(account, 2, lockNum[1], lockTime[1]);
+            lockTokenToDate(account, 3, lockNum[2], lockTime[2]);
         }
         else if(locktype == 2) {
-            firstTime = 1539619200;     //2018-10-16
-            secondTime = 1544889600;    //2018-12-16
-            thirdTime = 1550246400;     //2019-02-16
-            fourthTime = 1555344000;    //2019-04-16
+            lockTime[0] = 1542297600;     //2018-11-16
+            lockTime[1] = 1550246400;     //2019-02-16
+            lockTime[2] = 1557936000;     //2019-05-16
+            lockTime[3] = 1565884800;     //2019-08-16
 
-            firstLockToken = amount * 25 / 100;
-            secondLockToken = amount * 25 / 100;
-            thirdLockToken = amount * 25 / 100;
-            fourthLockToken = amount - firstLockToken - secondLockToken - thirdLockToken;
+            lockNum[0] = amount * 25 / 100;
+            lockNum[1] = amount * 25 / 100;
+            lockNum[2] = amount * 25 / 100;
+            lockNum[3] = amount - lockNum[0] - lockNum[1] - lockNum[2];
 
-            lockTokenToDate(account, 1, firstLockToken, firstTime);
-            lockTokenToDate(account, 2, secondLockToken, secondTime);
-            lockTokenToDate(account, 3, thirdLockToken, thirdTime);
-            lockTokenToDate(account, 4, fourthLockToken, fourthTime);
+            lockTokenToDate(account, 1, lockNum[0], lockTime[0]);
+            lockTokenToDate(account, 2, lockNum[1], lockTime[1]);
+            lockTokenToDate(account, 3, lockNum[2], lockTime[2]);
+            lockTokenToDate(account, 4, lockNum[3], lockTime[3]);
         }
         else if(locktype == 3) {
-            firstTime = 1537027200;     //2018-09-16
-            secondTime = 1539619200;    //2018-10-16
-            thirdTime = 1544889600;     //2018-12-16
-            fourthTime = 1550246400;    //2019-02-16
+            lockTime[0] = 1537027200;     //2018-09-16
+            lockTime[1] = 1539619200;     //2018-10-16
+            lockTime[2] = 1544889600;     //2018-12-16
+            lockTime[3] = 1550246400;     //2019-02-16
 
-            firstLockToken = amount * 25 / 100;
-            secondLockToken = amount * 25 / 100;
-            thirdLockToken = amount * 25 / 100;
-            fourthLockToken = amount - firstLockToken - secondLockToken - thirdLockToken;
+            lockNum[0] = amount * 25 / 100;
+            lockNum[1] = amount * 25 / 100;
+            lockNum[2] = amount * 25 / 100;
+            lockNum[3] = amount - lockNum[0] - lockNum[1] - lockNum[2];
 
-            lockTokenToDate(account, 1, firstLockToken, firstTime);
-            lockTokenToDate(account, 2, secondLockToken, secondTime);
-            lockTokenToDate(account, 3, thirdLockToken, thirdTime);
-            lockTokenToDate(account, 4, fourthLockToken, fourthTime);
+            lockTokenToDate(account, 1, lockNum[0], lockTime[0]);
+            lockTokenToDate(account, 2, lockNum[1], lockTime[1]);
+            lockTokenToDate(account, 3, lockNum[2], lockTime[2]);
+            lockTokenToDate(account, 4, lockNum[3], lockTime[3]);
         }
         else if(locktype == 4) {
-            firstTime = 1537027200;     //2018-09-16
-            secondTime = 1539619200;    //2018-10-16
-            thirdTime = 1544889600;     //2018-12-16
-            fourthTime = 1550246400;    //2019-02-16
+            lockTime[0] = 1537027200;     //2018-09-16
+            lockTime[1] = 1539619200;     //2018-10-16
+            lockTime[2] = 1544889600;     //2018-12-16
+            lockTime[3] = 1550246400;     //2019-02-16
 
-            firstLockToken = amount * 40 / 100;
-            secondLockToken = amount * 20 / 100;
-            thirdLockToken = amount * 20 / 100;
-            fourthLockToken = amount - firstLockToken - secondLockToken - thirdLockToken;
+            lockNum[0] = amount * 40 / 100;
+            lockNum[1] = amount * 20 / 100;
+            lockNum[2] = amount * 20 / 100;
+            lockNum[3] = amount - lockNum[0] - lockNum[1] - lockNum[2];
 
-            lockTokenToDate(account, 1, firstLockToken, firstTime);
-            lockTokenToDate(account, 2, secondLockToken, secondTime);
-            lockTokenToDate(account, 3, thirdLockToken, thirdTime);
-            lockTokenToDate(account, 4, fourthLockToken, fourthTime);
+            lockTokenToDate(account, 1, lockNum[0], lockTime[0]);
+            lockTokenToDate(account, 2, lockNum[1], lockTime[1]);
+            lockTokenToDate(account, 3, lockNum[2], lockTime[2]);
+            lockTokenToDate(account, 4, lockNum[3], lockTime[3]);
         }
         else if(locktype == 5) {
-            firstTime = 1537027200;     //2018-09-16
+            lockTime[0] = 1537027200;     //2018-09-16
 
-            firstLockToken = amount;
+            lockNum[0] = amount;
 
-            lockTokenToDate(account, 1, firstLockToken, firstTime);
+            lockTokenToDate(account, 1, lockNum[0], lockTime[0]);
+        }
+        else if(locktype == 6) {
+            lockTime[0] = 1550246400;     //2019-02-16
+            lockTime[1] = 1565884800;     //2019-08-16
+            lockTime[2] = 1581782400;     //2020-02-16
+            lockTime[3] = 1597507200;     //2020-08-16
+
+            lockNum[0] = amount * 25 / 100;
+            lockNum[1] = amount * 25 / 100;
+            lockNum[2] = amount * 25 / 100;
+            lockNum[3] = amount - lockNum[0] - lockNum[1] - lockNum[2];
+
+            lockTokenToDate(account, 1, lockNum[0], lockTime[0]);
+            lockTokenToDate(account, 2, lockNum[1], lockTime[1]);
+            lockTokenToDate(account, 3, lockNum[2], lockTime[2]);
+            lockTokenToDate(account, 4, lockNum[3], lockTime[3]);
         }
         else {
-            firstTime = 1550246400;     //2019-02-16
-            secondTime = 1565884800;    //2019-08-16
-            thirdTime = 1581782400;     //2020-02-16
-            fourthTime = 1597507200;    //2020-08-16
+            lockTime[0] = 1542297600;     //2018-11-16
+            lockTime[1] = 1544889600;     //2018-12-16
+            lockTime[2] = 1547568000;     //2019-01-16
+            lockTime[3] = 1550246400;     //2019-02-16
+            lockTime[4] = 1552665600;     //2019-03-16
+            lockTime[5] = 1555344000;     //2019-04-16
+            lockTime[6] = 1557936000;     //2019-05-16
+            lockTime[7] = 1560614400;     //2019-06-16
+            lockTime[8] = 1563206400;     //2019-07-16
+            lockTime[9] = 1565884800;     //2019-08-16
 
-            firstLockToken = amount * 25 / 100;
-            secondLockToken = amount * 25 / 100;
-            thirdLockToken = amount * 25 / 100;
-            fourthLockToken = amount - firstLockToken - secondLockToken - thirdLockToken;
+            lockNum[0] = amount * 10 / 100;
+            lockNum[1] = amount * 10 / 100;
+            lockNum[2] = amount * 10 / 100;
+            lockNum[3] = amount * 10 / 100;
+            lockNum[4] = amount * 10 / 100;
+            lockNum[5] = amount * 10 / 100;
+            lockNum[6] = amount * 10 / 100;
+            lockNum[7] = amount * 10 / 100;
+            lockNum[8] = amount * 10 / 100;
+            lockNum[9] = amount - lockNum[0] - lockNum[1] - lockNum[2] - lockNum[3] - lockNum[4] - lockNum[5] - lockNum[6] - lockNum[7] - lockNum[8];
 
-            lockTokenToDate(account, 1, firstLockToken, firstTime);
-            lockTokenToDate(account, 2, secondLockToken, secondTime);
-            lockTokenToDate(account, 3, thirdLockToken, thirdTime);
-            lockTokenToDate(account, 4, fourthLockToken, fourthTime);
+            lockTokenToDate(account, 1, lockNum[0], lockTime[0]);
+            lockTokenToDate(account, 2, lockNum[1], lockTime[1]);
+            lockTokenToDate(account, 3, lockNum[2], lockTime[2]);
+            lockTokenToDate(account, 4, lockNum[3], lockTime[3]);
+            lockTokenToDate(account, 5, lockNum[4], lockTime[4]);
+            lockTokenToDate(account, 6, lockNum[5], lockTime[5]);
+            lockTokenToDate(account, 7, lockNum[6], lockTime[6]);
+            lockTokenToDate(account, 8, lockNum[7], lockTime[7]);
+            lockTokenToDate(account, 9, lockNum[8], lockTime[8]);
+            lockTokenToDate(account, 10, lockNum[9], lockTime[9]);
         }
 
         emit LockToken(account, locktype, amount);
